@@ -12,7 +12,10 @@ class Status(models.Model):
 
 
 class User(models.Model):
-    pass
+    login = models.CharField(
+        verbose_name='User name',
+        max_length=20,
+    )
 
 
 class Channel(models.Model):
