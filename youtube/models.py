@@ -4,14 +4,14 @@ from django.db import models
 # Create your models here.
 
 class Gender(models.Model):
-    gender = models.CharField(max_length=64)
+    gender = models.CharField(max_length=20)
 
     def __str__(self):
         return self.gender
 
 
 class Status(models.Model):
-    status = models.CharField(max_length=64)
+    status = models.CharField(max_length=20)
 
     def __str__(self):
         return self.status
