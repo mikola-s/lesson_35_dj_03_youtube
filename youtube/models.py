@@ -25,7 +25,7 @@ class User(models.Model):
     )
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
-    register_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    register_time = models.DateTimeField(auto_now_add=True)
     first_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=20, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
