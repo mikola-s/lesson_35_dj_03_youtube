@@ -4,25 +4,26 @@ from django.db import models
 # Create your models here.
 
 class Gender(models.Model):
-    pass
+    gender = models.CharField(max_length=64)
 
 
 class Status(models.Model):
-    pass
+    status = models.CharField(max_length=64)
 
 
 class User(models.Model):
     login = models.CharField(
         verbose_name='User name',
-        max_length=20,
+        max_length=32,
         unique=True,
     )
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=20)
+    password = models.CharField(max_length=255)
+    gender = models.ForeignKey(Gender)
 
 
 class Channel(models.Model):
-    pass
+    title = models.CharField(max_length=255)
 
 
 class Movie(models.Model):
