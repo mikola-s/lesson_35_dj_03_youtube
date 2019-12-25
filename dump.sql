@@ -453,7 +453,7 @@ ALTER SEQUENCE public.youtube_gender_id_seq OWNED BY public.youtube_gender.id;
 CREATE TABLE public.youtube_movie (
     id integer NOT NULL,
     file character varying(100) NOT NULL,
-    post_time timestamp with time zone,
+    post_time timestamp with time zone NOT NULL,
     title character varying(255) NOT NULL,
     channel_id integer NOT NULL,
     screen_shot character varying(100) NOT NULL
@@ -528,7 +528,7 @@ CREATE TABLE public.youtube_user (
     gender_id integer,
     login character varying(32) NOT NULL,
     password character varying(255) NOT NULL,
-    register_time timestamp with time zone,
+    register_time timestamp with time zone NOT NULL,
     status_id integer,
     birth_date date,
     first_name character varying(20),
@@ -821,6 +821,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 23	youtube	0006_auto_20191225_1037	2019-12-25 12:39:05.510226+00
 24	youtube	0007_auto_20191225_1108	2019-12-25 13:08:14.527032+00
 25	youtube	0008_auto_20191225_1122	2019-12-25 13:23:10.568317+00
+26	youtube	0009_auto_20191225_1129	2019-12-25 13:29:54.267902+00
 \.
 
 
@@ -940,7 +941,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 25, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 26, true);
 
 
 --
