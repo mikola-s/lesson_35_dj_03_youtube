@@ -33,7 +33,7 @@ class User(models.Model):
     status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f'site user {self.login}'
+        return f'Youtube user {self.login}'
 
 
 class Channel(models.Model):
