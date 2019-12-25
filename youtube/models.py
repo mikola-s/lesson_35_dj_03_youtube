@@ -46,7 +46,7 @@ class Channel(models.Model):
 
 class Movie(models.Model):
     title = models.CharField(max_length=255)
-    post_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    post_time = models.DateTimeField(auto_now_add=True)
     screen_shot = models.ImageField(default='youtube/media/mock_file.jpg')
     file = models.FileField(upload_to='youtube/media/', default='youtube/media/mock_file.jpg')
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
