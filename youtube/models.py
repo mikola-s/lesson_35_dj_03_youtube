@@ -19,8 +19,8 @@ class User(models.Model):
     )
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
-    gender = models.ForeignKey(Gender)
-    status = models.ForeignKey(Status)
+    gender = models.ForeignKey(Gender, on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE)
 
 
 class Channel(models.Model):
