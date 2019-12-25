@@ -447,6 +447,41 @@ ALTER SEQUENCE public.youtube_gender_id_seq OWNED BY public.youtube_gender.id;
 
 
 --
+-- Name: youtube_like; Type: TABLE; Schema: public; Owner: mikola-s
+--
+
+CREATE TABLE public.youtube_like (
+    id integer NOT NULL,
+    movie_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.youtube_like OWNER TO "mikola-s";
+
+--
+-- Name: youtube_like_id_seq; Type: SEQUENCE; Schema: public; Owner: mikola-s
+--
+
+CREATE SEQUENCE public.youtube_like_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.youtube_like_id_seq OWNER TO "mikola-s";
+
+--
+-- Name: youtube_like_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mikola-s
+--
+
+ALTER SEQUENCE public.youtube_like_id_seq OWNED BY public.youtube_like.id;
+
+
+--
 -- Name: youtube_movie; Type: TABLE; Schema: public; Owner: mikola-s
 --
 
@@ -638,6 +673,13 @@ ALTER TABLE ONLY public.youtube_gender ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: youtube_like id; Type: DEFAULT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_like ALTER COLUMN id SET DEFAULT nextval('public.youtube_like_id_seq'::regclass);
+
+
+--
 -- Name: youtube_movie id; Type: DEFAULT; Schema: public; Owner: mikola-s
 --
 
@@ -723,6 +765,10 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 42	Can change user	11	change_user
 43	Can delete user	11	delete_user
 44	Can view user	11	view_user
+45	Can add like	12	add_like
+46	Can change like	12	change_like
+47	Can delete like	12	delete_like
+48	Can view like	12	view_like
 \.
 
 
@@ -795,6 +841,7 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 9	youtube	movie
 10	youtube	status
 11	youtube	user
+12	youtube	like
 \.
 
 
@@ -830,6 +877,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 25	youtube	0008_auto_20191225_1122	2019-12-25 13:23:10.568317+00
 26	youtube	0009_auto_20191225_1129	2019-12-25 13:29:54.267902+00
 27	youtube	0010_auto_20191225_1313	2019-12-25 15:13:20.309577+00
+28	youtube	0011_like	2019-12-25 15:36:43.640707+00
 \.
 
 
@@ -860,6 +908,14 @@ COPY public.youtube_gender (id, gender) FROM stdin;
 1	male
 2	female
 3	other
+\.
+
+
+--
+-- Data for Name: youtube_like; Type: TABLE DATA; Schema: public; Owner: mikola-s
+--
+
+COPY public.youtube_like (id, movie_id, user_id) FROM stdin;
 \.
 
 
@@ -910,7 +966,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 44, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 48, true);
 
 
 --
@@ -945,14 +1001,14 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 20, true);
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 12, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 27, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 28, true);
 
 
 --
@@ -967,6 +1023,13 @@ SELECT pg_catalog.setval('public.youtube_channel_id_seq', 2, true);
 --
 
 SELECT pg_catalog.setval('public.youtube_gender_id_seq', 3, true);
+
+
+--
+-- Name: youtube_like_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
+--
+
+SELECT pg_catalog.setval('public.youtube_like_id_seq', 1, false);
 
 
 --
@@ -1143,6 +1206,22 @@ ALTER TABLE ONLY public.youtube_gender
 
 
 --
+-- Name: youtube_like youtube_like_movie_id_user_id_184db781_uniq; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_like
+    ADD CONSTRAINT youtube_like_movie_id_user_id_184db781_uniq UNIQUE (movie_id, user_id);
+
+
+--
+-- Name: youtube_like youtube_like_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_like
+    ADD CONSTRAINT youtube_like_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: youtube_movie youtube_movie_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
 --
 
@@ -1281,6 +1360,20 @@ CREATE INDEX youtube_channel_owner_id_3db44c53 ON public.youtube_channel USING b
 
 
 --
+-- Name: youtube_like_movie_id_e69446ad; Type: INDEX; Schema: public; Owner: mikola-s
+--
+
+CREATE INDEX youtube_like_movie_id_e69446ad ON public.youtube_like USING btree (movie_id);
+
+
+--
+-- Name: youtube_like_user_id_67234ecd; Type: INDEX; Schema: public; Owner: mikola-s
+--
+
+CREATE INDEX youtube_like_user_id_67234ecd ON public.youtube_like USING btree (user_id);
+
+
+--
 -- Name: youtube_movie_channel_id_1e4f2e34; Type: INDEX; Schema: public; Owner: mikola-s
 --
 
@@ -1393,6 +1486,22 @@ ALTER TABLE ONLY public.django_admin_log
 
 ALTER TABLE ONLY public.youtube_channel
     ADD CONSTRAINT youtube_channel_owner_id_3db44c53_fk_youtube_user_id FOREIGN KEY (owner_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: youtube_like youtube_like_movie_id_e69446ad_fk_youtube_movie_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_like
+    ADD CONSTRAINT youtube_like_movie_id_e69446ad_fk_youtube_movie_id FOREIGN KEY (movie_id) REFERENCES public.youtube_movie(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: youtube_like youtube_like_user_id_67234ecd_fk_youtube_user_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_like
+    ADD CONSTRAINT youtube_like_user_id_67234ecd_fk_youtube_user_id FOREIGN KEY (user_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
