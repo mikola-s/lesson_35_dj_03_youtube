@@ -527,7 +527,10 @@ CREATE TABLE public.youtube_user (
     login character varying(32) NOT NULL,
     password character varying(255) NOT NULL,
     register_time timestamp with time zone,
-    status_id integer
+    status_id integer,
+    birth_date date,
+    first_name character varying(20),
+    last_name character varying(20)
 );
 
 
@@ -763,6 +766,7 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 10	2019-12-25 11:09:13.176952+00	2	site user maxim	1	[{"added": {}}]	11	1
 11	2019-12-25 11:49:21.617939+00	2	site user maxim	3		11	1
 12	2019-12-25 11:49:39.267427+00	3	site user maxim	1	[{"added": {}}]	11	1
+13	2019-12-25 13:10:36.269585+00	1	site user irina	2	[{"changed": {"fields": ["first_name", "last_name"]}}]	11	1
 \.
 
 
@@ -813,6 +817,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 21	youtube	0004_auto_20191225_1304	2019-12-25 11:04:41.491281+00
 22	youtube	0005_auto_20191225_1308	2019-12-25 11:08:09.656259+00
 23	youtube	0006_auto_20191225_1037	2019-12-25 12:39:05.510226+00
+24	youtube	0007_auto_20191225_1108	2019-12-25 13:08:14.527032+00
 \.
 
 
@@ -866,9 +871,9 @@ COPY public.youtube_status (id, status) FROM stdin;
 -- Data for Name: youtube_user; Type: TABLE DATA; Schema: public; Owner: mikola-s
 --
 
-COPY public.youtube_user (id, email, gender_id, login, password, register_time, status_id) FROM stdin;
-1	test@test.test	1	irina	1234	2019-12-25 11:08:28.635308+00	1
-3	maxim@test.test	\N	maxim	1234	2019-12-25 11:49:39.266677+00	\N
+COPY public.youtube_user (id, email, gender_id, login, password, register_time, status_id, birth_date, first_name, last_name) FROM stdin;
+3	maxim@test.test	\N	maxim	1234	2019-12-25 11:49:39.266677+00	\N	\N	\N	\N
+1	test@test.test	1	irina	1234	2019-12-25 11:08:28.635308+00	1	\N	irina	irina
 \.
 
 
@@ -918,7 +923,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 12, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 13, true);
 
 
 --
@@ -932,7 +937,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 23, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 24, true);
 
 
 --
