@@ -383,7 +383,8 @@ ALTER TABLE public.django_session OWNER TO "mikola-s";
 
 CREATE TABLE public.youtube_channel (
     id integer NOT NULL,
-    title character varying(255) NOT NULL
+    title character varying(255) NOT NULL,
+    owner_id integer NOT NULL
 );
 
 
@@ -417,7 +418,7 @@ ALTER SEQUENCE public.youtube_channel_id_seq OWNED BY public.youtube_channel.id;
 
 CREATE TABLE public.youtube_gender (
     id integer NOT NULL,
-    gender character varying(64) NOT NULL
+    gender character varying(20) NOT NULL
 );
 
 
@@ -487,7 +488,7 @@ ALTER SEQUENCE public.youtube_movie_id_seq OWNED BY public.youtube_movie.id;
 
 CREATE TABLE public.youtube_status (
     id integer NOT NULL,
-    status character varying(64) NOT NULL
+    status character varying(20) NOT NULL
 );
 
 
@@ -757,6 +758,11 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 5	2019-12-25 10:44:11.929945+00	3	Gender object (3)	1	[{"added": {}}]	8	1
 6	2019-12-25 10:52:53.976751+00	1	user	1	[{"added": {}}]	10	1
 7	2019-12-25 10:53:12.663983+00	2	premium	1	[{"added": {}}]	10	1
+8	2019-12-25 11:08:28.636893+00	1	site user irina	1	[{"added": {}}]	11	1
+9	2019-12-25 11:08:44.618961+00	1	site user irina	2	[{"changed": {"fields": ["gender", "status"]}}]	11	1
+10	2019-12-25 11:09:13.176952+00	2	site user maxim	1	[{"added": {}}]	11	1
+11	2019-12-25 11:49:21.617939+00	2	site user maxim	3		11	1
+12	2019-12-25 11:49:39.267427+00	3	site user maxim	1	[{"added": {}}]	11	1
 \.
 
 
@@ -804,6 +810,9 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 18	youtube	0001_initial	2019-12-24 21:24:31.189198+00
 19	youtube	0002_auto_20191225_1158	2019-12-25 10:03:48.914513+00
 20	youtube	0003_auto_20191225_1256	2019-12-25 10:56:39.706866+00
+21	youtube	0004_auto_20191225_1304	2019-12-25 11:04:41.491281+00
+22	youtube	0005_auto_20191225_1308	2019-12-25 11:08:09.656259+00
+23	youtube	0006_auto_20191225_1037	2019-12-25 12:39:05.510226+00
 \.
 
 
@@ -820,7 +829,7 @@ ba01wunji82rly9vjb52hyomvi7ygnb5	NTNkYTlkOGM1ODNhMGZmNDZhZjc4YjZkZjg2NTM1NmNlNjI
 -- Data for Name: youtube_channel; Type: TABLE DATA; Schema: public; Owner: mikola-s
 --
 
-COPY public.youtube_channel (id, title) FROM stdin;
+COPY public.youtube_channel (id, title, owner_id) FROM stdin;
 \.
 
 
@@ -858,6 +867,8 @@ COPY public.youtube_status (id, status) FROM stdin;
 --
 
 COPY public.youtube_user (id, email, gender_id, login, password, register_time, status_id) FROM stdin;
+1	test@test.test	1	irina	1234	2019-12-25 11:08:28.635308+00	1
+3	maxim@test.test	\N	maxim	1234	2019-12-25 11:49:39.266677+00	\N
 \.
 
 
@@ -907,7 +918,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 7, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 12, true);
 
 
 --
@@ -921,7 +932,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 20, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 23, true);
 
 
 --
@@ -956,7 +967,7 @@ SELECT pg_catalog.setval('public.youtube_status_id_seq', 2, true);
 -- Name: youtube_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_user_id_seq', 1, false);
+SELECT pg_catalog.setval('public.youtube_user_id_seq', 3, true);
 
 
 --
@@ -1243,6 +1254,13 @@ CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session U
 
 
 --
+-- Name: youtube_channel_owner_id_3db44c53; Type: INDEX; Schema: public; Owner: mikola-s
+--
+
+CREATE INDEX youtube_channel_owner_id_3db44c53 ON public.youtube_channel USING btree (owner_id);
+
+
+--
 -- Name: youtube_user_email_a453a998_like; Type: INDEX; Schema: public; Owner: mikola-s
 --
 
@@ -1340,6 +1358,14 @@ ALTER TABLE ONLY public.django_admin_log
 
 ALTER TABLE ONLY public.django_admin_log
     ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: youtube_channel youtube_channel_owner_id_3db44c53_fk_youtube_user_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_channel
+    ADD CONSTRAINT youtube_channel_owner_id_3db44c53_fk_youtube_user_id FOREIGN KEY (owner_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
