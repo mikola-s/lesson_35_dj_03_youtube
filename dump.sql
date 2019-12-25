@@ -452,11 +452,11 @@ ALTER SEQUENCE public.youtube_gender_id_seq OWNED BY public.youtube_gender.id;
 
 CREATE TABLE public.youtube_movie (
     id integer NOT NULL,
-    file character varying(100) NOT NULL,
+    file character varying(100),
     post_time timestamp with time zone NOT NULL,
     title character varying(255) NOT NULL,
     channel_id integer NOT NULL,
-    screen_shot character varying(100) NOT NULL
+    screen_shot character varying(100)
 );
 
 
@@ -769,6 +769,13 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 11	2019-12-25 11:49:21.617939+00	2	site user maxim	3		11	1
 12	2019-12-25 11:49:39.267427+00	3	site user maxim	1	[{"added": {}}]	11	1
 13	2019-12-25 13:10:36.269585+00	1	site user irina	2	[{"changed": {"fields": ["first_name", "last_name"]}}]	11	1
+14	2019-12-25 13:59:28.467813+00	1	irina channell	1	[{"added": {}}]	7	1
+15	2019-12-25 13:59:52.899807+00	2	maxim channell	1	[{"added": {}}]	7	1
+16	2019-12-25 14:12:58.21378+00	1	irina channel movies 1	1	[{"added": {}}]	9	1
+17	2019-12-25 14:18:27.333553+00	1	irina channel movies 1	3		9	1
+18	2019-12-25 14:56:56.346044+00	2	movie1 in irina channel 1	1	[{"added": {}}]	9	1
+19	2019-12-25 14:58:06.559464+00	2	movie1 in irina channel 1	3		9	1
+20	2019-12-25 15:14:14.543847+00	3	111	1	[{"added": {}}]	9	1
 \.
 
 
@@ -822,6 +829,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 24	youtube	0007_auto_20191225_1108	2019-12-25 13:08:14.527032+00
 25	youtube	0008_auto_20191225_1122	2019-12-25 13:23:10.568317+00
 26	youtube	0009_auto_20191225_1129	2019-12-25 13:29:54.267902+00
+27	youtube	0010_auto_20191225_1313	2019-12-25 15:13:20.309577+00
 \.
 
 
@@ -839,6 +847,8 @@ ba01wunji82rly9vjb52hyomvi7ygnb5	NTNkYTlkOGM1ODNhMGZmNDZhZjc4YjZkZjg2NTM1NmNlNjI
 --
 
 COPY public.youtube_channel (id, title, owner_id) FROM stdin;
+1	irina channell	1
+2	maxim channell	3
 \.
 
 
@@ -858,6 +868,7 @@ COPY public.youtube_gender (id, gender) FROM stdin;
 --
 
 COPY public.youtube_movie (id, file, post_time, title, channel_id, screen_shot) FROM stdin;
+3		2019-12-25 15:14:14.542486+00	111	1	
 \.
 
 
@@ -927,7 +938,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 13, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 20, true);
 
 
 --
@@ -941,14 +952,14 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 26, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 27, true);
 
 
 --
 -- Name: youtube_channel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_channel_id_seq', 1, false);
+SELECT pg_catalog.setval('public.youtube_channel_id_seq', 2, true);
 
 
 --
@@ -962,7 +973,7 @@ SELECT pg_catalog.setval('public.youtube_gender_id_seq', 3, true);
 -- Name: youtube_movie_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_movie_id_seq', 1, false);
+SELECT pg_catalog.setval('public.youtube_movie_id_seq', 3, true);
 
 
 --
