@@ -47,9 +47,9 @@ class Channel(models.Model):
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     post_time = models.DateTimeField(auto_now_add=True)
-    screen_shot = models.ImageField(upload_to=f'youtube/static/youtube/media/{title}/screenshot', null=True, blank=True)
-    file = models.FileField(upload_to=f'youtube/static/youtube/media/{title}/movie/', null=True, blank=True)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
+    screen_shot = models.ImageField(upload_to=f'youtube/static/youtube/media/', null=True, blank=True)
+    file = models.FileField(upload_to=f'youtube/static/youtube/media/media/', null=True, blank=True)
 
     def __str__(self):
         return self.title
