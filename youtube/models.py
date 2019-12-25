@@ -15,7 +15,10 @@ class User(models.Model):
     login = models.CharField(
         verbose_name='User name',
         max_length=20,
+        unique=True,
     )
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=20)
 
 
 class Channel(models.Model):
@@ -23,4 +26,6 @@ class Channel(models.Model):
 
 
 class Movie(models.Model):
-    pass
+    title = models.CharField(max_length=255)
+    post_time = models.DateTimeField(auto_now_add=True)
+    file = models.URLField('static/avi/mock_file.jpg')
