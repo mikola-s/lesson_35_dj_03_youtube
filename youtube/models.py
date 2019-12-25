@@ -20,6 +20,7 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     gender = models.ForeignKey(Gender)
+    status = models.ForeignKey(Status)
 
 
 class Channel(models.Model):
