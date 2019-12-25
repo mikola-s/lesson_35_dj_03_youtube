@@ -454,7 +454,9 @@ CREATE TABLE public.youtube_movie (
     id integer NOT NULL,
     file character varying(100) NOT NULL,
     post_time timestamp with time zone,
-    title character varying(255) NOT NULL
+    title character varying(255) NOT NULL,
+    channel_id integer NOT NULL,
+    screen_shot character varying(100) NOT NULL
 );
 
 
@@ -818,6 +820,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 22	youtube	0005_auto_20191225_1308	2019-12-25 11:08:09.656259+00
 23	youtube	0006_auto_20191225_1037	2019-12-25 12:39:05.510226+00
 24	youtube	0007_auto_20191225_1108	2019-12-25 13:08:14.527032+00
+25	youtube	0008_auto_20191225_1122	2019-12-25 13:23:10.568317+00
 \.
 
 
@@ -853,7 +856,7 @@ COPY public.youtube_gender (id, gender) FROM stdin;
 -- Data for Name: youtube_movie; Type: TABLE DATA; Schema: public; Owner: mikola-s
 --
 
-COPY public.youtube_movie (id, file, post_time, title) FROM stdin;
+COPY public.youtube_movie (id, file, post_time, title, channel_id, screen_shot) FROM stdin;
 \.
 
 
@@ -937,7 +940,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 24, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 25, true);
 
 
 --
@@ -1266,6 +1269,13 @@ CREATE INDEX youtube_channel_owner_id_3db44c53 ON public.youtube_channel USING b
 
 
 --
+-- Name: youtube_movie_channel_id_1e4f2e34; Type: INDEX; Schema: public; Owner: mikola-s
+--
+
+CREATE INDEX youtube_movie_channel_id_1e4f2e34 ON public.youtube_movie USING btree (channel_id);
+
+
+--
 -- Name: youtube_user_email_a453a998_like; Type: INDEX; Schema: public; Owner: mikola-s
 --
 
@@ -1371,6 +1381,14 @@ ALTER TABLE ONLY public.django_admin_log
 
 ALTER TABLE ONLY public.youtube_channel
     ADD CONSTRAINT youtube_channel_owner_id_3db44c53_fk_youtube_user_id FOREIGN KEY (owner_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: youtube_movie youtube_movie_channel_id_1e4f2e34_fk_youtube_channel_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_movie
+    ADD CONSTRAINT youtube_movie_channel_id_1e4f2e34_fk_youtube_channel_id FOREIGN KEY (channel_id) REFERENCES public.youtube_channel(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
