@@ -483,6 +483,40 @@ ALTER SEQUENCE public.youtube_expressiontype_id_seq OWNED BY public.youtube_expr
 
 
 --
+-- Name: youtube_file; Type: TABLE; Schema: public; Owner: mikola-s
+--
+
+CREATE TABLE public.youtube_file (
+    id integer NOT NULL,
+    place character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.youtube_file OWNER TO "mikola-s";
+
+--
+-- Name: youtube_file_id_seq; Type: SEQUENCE; Schema: public; Owner: mikola-s
+--
+
+CREATE SEQUENCE public.youtube_file_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.youtube_file_id_seq OWNER TO "mikola-s";
+
+--
+-- Name: youtube_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mikola-s
+--
+
+ALTER SEQUENCE public.youtube_file_id_seq OWNED BY public.youtube_file.id;
+
+
+--
 -- Name: youtube_gender; Type: TABLE; Schema: public; Owner: mikola-s
 --
 
@@ -517,12 +551,46 @@ ALTER SEQUENCE public.youtube_gender_id_seq OWNED BY public.youtube_gender.id;
 
 
 --
+-- Name: youtube_miniature; Type: TABLE; Schema: public; Owner: mikola-s
+--
+
+CREATE TABLE public.youtube_miniature (
+    id integer NOT NULL,
+    place character varying(100) NOT NULL,
+    file_id integer NOT NULL
+);
+
+
+ALTER TABLE public.youtube_miniature OWNER TO "mikola-s";
+
+--
+-- Name: youtube_miniature_id_seq; Type: SEQUENCE; Schema: public; Owner: mikola-s
+--
+
+CREATE SEQUENCE public.youtube_miniature_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.youtube_miniature_id_seq OWNER TO "mikola-s";
+
+--
+-- Name: youtube_miniature_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mikola-s
+--
+
+ALTER SEQUENCE public.youtube_miniature_id_seq OWNED BY public.youtube_miniature.id;
+
+
+--
 -- Name: youtube_movie; Type: TABLE; Schema: public; Owner: mikola-s
 --
 
 CREATE TABLE public.youtube_movie (
     id integer NOT NULL,
-    file character varying(100),
     post_time timestamp with time zone NOT NULL,
     title character varying(255) NOT NULL,
     channel_id integer NOT NULL,
@@ -715,10 +783,24 @@ ALTER TABLE ONLY public.youtube_expressiontype ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: youtube_file id; Type: DEFAULT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_file ALTER COLUMN id SET DEFAULT nextval('public.youtube_file_id_seq'::regclass);
+
+
+--
 -- Name: youtube_gender id; Type: DEFAULT; Schema: public; Owner: mikola-s
 --
 
 ALTER TABLE ONLY public.youtube_gender ALTER COLUMN id SET DEFAULT nextval('public.youtube_gender_id_seq'::regclass);
+
+
+--
+-- Name: youtube_miniature id; Type: DEFAULT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_miniature ALTER COLUMN id SET DEFAULT nextval('public.youtube_miniature_id_seq'::regclass);
 
 
 --
@@ -819,6 +901,14 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 54	Can change expression type	14	change_expressiontype
 55	Can delete expression type	14	delete_expressiontype
 56	Can view expression type	14	view_expressiontype
+57	Can add file	15	add_file
+58	Can change file	15	change_file
+59	Can delete file	15	delete_file
+60	Can view file	15	view_file
+61	Can add miniature	16	add_miniature
+62	Can change miniature	16	change_miniature
+63	Can delete miniature	16	delete_miniature
+64	Can view miniature	16	view_miniature
 \.
 
 
@@ -827,7 +917,7 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$150000$UtSGodI0zORo$W9f1gBnIVo4wJX5A3nhU4jpqg/Zh/ZruPxkmGDc7aB4=	2019-12-24 15:28:29.780159+00	t	mikola-s			example@test.com	t	t	2019-12-24 15:24:30.478925+00
+1	pbkdf2_sha256$150000$UtSGodI0zORo$W9f1gBnIVo4wJX5A3nhU4jpqg/Zh/ZruPxkmGDc7aB4=	2019-12-26 08:36:01.691549+00	t	mikola-s			example@test.com	t	t	2019-12-24 15:24:30.478925+00
 \.
 
 
@@ -876,6 +966,9 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 22	2019-12-25 15:38:51.565216+00	3	irina 111	2	[{"changed": {"fields": ["title"]}}]	9	1
 23	2019-12-25 15:39:04.818109+00	1	irina channel	2	[{"changed": {"fields": ["title"]}}]	7	1
 24	2019-12-25 15:39:14.00353+00	2	maxim channel	2	[{"changed": {"fields": ["title"]}}]	7	1
+57	2019-12-26 08:36:19.270989+00	1	like	1	[{"added": {}}]	14	1
+58	2019-12-26 08:36:25.278903+00	2	dislike	1	[{"added": {}}]	14	1
+59	2019-12-26 08:37:01.220617+00	1	Expression	1	[{"added": {}}]	13	1
 \.
 
 
@@ -898,6 +991,8 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 12	youtube	like
 13	youtube	expression
 14	youtube	expressiontype
+15	youtube	file
+16	youtube	miniature
 \.
 
 
@@ -935,6 +1030,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 27	youtube	0010_auto_20191225_1313	2019-12-25 15:13:20.309577+00
 28	youtube	0011_like	2019-12-25 15:36:43.640707+00
 29	youtube	0012_auto_20191226_0632	2019-12-26 08:33:04.233876+00
+30	youtube	0013_auto_20191226_0922	2019-12-26 11:22:57.471611+00
 \.
 
 
@@ -944,6 +1040,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 ba01wunji82rly9vjb52hyomvi7ygnb5	NTNkYTlkOGM1ODNhMGZmNDZhZjc4YjZkZjg2NTM1NmNlNjI0MWM2ODp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyYzY4N2JmNjYyNTI5NGRkZTQ3YjgyMjg4YmI0NWIxZTcyODczZWM1In0=	2020-01-07 15:28:29.795199+00
+rc84tk36k7wrmb6vc5z0staxsxyxm2vq	NTNkYTlkOGM1ODNhMGZmNDZhZjc4YjZkZjg2NTM1NmNlNjI0MWM2ODp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyYzY4N2JmNjYyNTI5NGRkZTQ3YjgyMjg4YmI0NWIxZTcyODczZWM1In0=	2020-01-09 08:36:01.704959+00
 \.
 
 
@@ -962,6 +1059,7 @@ COPY public.youtube_channel (id, title, owner_id) FROM stdin;
 --
 
 COPY public.youtube_expression (id, movie_id, type_id, user_id) FROM stdin;
+1	3	1	3
 \.
 
 
@@ -970,6 +1068,16 @@ COPY public.youtube_expression (id, movie_id, type_id, user_id) FROM stdin;
 --
 
 COPY public.youtube_expressiontype (id, name) FROM stdin;
+1	like
+2	dislike
+\.
+
+
+--
+-- Data for Name: youtube_file; Type: TABLE DATA; Schema: public; Owner: mikola-s
+--
+
+COPY public.youtube_file (id, place) FROM stdin;
 \.
 
 
@@ -985,12 +1093,20 @@ COPY public.youtube_gender (id, gender) FROM stdin;
 
 
 --
+-- Data for Name: youtube_miniature; Type: TABLE DATA; Schema: public; Owner: mikola-s
+--
+
+COPY public.youtube_miniature (id, place, file_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: youtube_movie; Type: TABLE DATA; Schema: public; Owner: mikola-s
 --
 
-COPY public.youtube_movie (id, file, post_time, title, channel_id, screen_shot) FROM stdin;
-4		2019-12-25 15:38:40.759382+00	irina 222	1	
-3		2019-12-25 15:14:14.542486+00	irina 111	1	
+COPY public.youtube_movie (id, post_time, title, channel_id, screen_shot) FROM stdin;
+4	2019-12-25 15:38:40.759382+00	irina 222	1	
+3	2019-12-25 15:14:14.542486+00	irina 111	1	
 \.
 
 
@@ -1032,7 +1148,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 56, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 64, true);
 
 
 --
@@ -1060,21 +1176,21 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 56, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 59, true);
 
 
 --
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 14, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 16, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 29, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 30, true);
 
 
 --
@@ -1088,14 +1204,21 @@ SELECT pg_catalog.setval('public.youtube_channel_id_seq', 2, true);
 -- Name: youtube_expression_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_expression_id_seq', 1, false);
+SELECT pg_catalog.setval('public.youtube_expression_id_seq', 1, true);
 
 
 --
 -- Name: youtube_expressiontype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_expressiontype_id_seq', 1, false);
+SELECT pg_catalog.setval('public.youtube_expressiontype_id_seq', 2, true);
+
+
+--
+-- Name: youtube_file_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
+--
+
+SELECT pg_catalog.setval('public.youtube_file_id_seq', 1, false);
 
 
 --
@@ -1103,6 +1226,13 @@ SELECT pg_catalog.setval('public.youtube_expressiontype_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.youtube_gender_id_seq', 3, true);
+
+
+--
+-- Name: youtube_miniature_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
+--
+
+SELECT pg_catalog.setval('public.youtube_miniature_id_seq', 1, false);
 
 
 --
@@ -1295,11 +1425,27 @@ ALTER TABLE ONLY public.youtube_expressiontype
 
 
 --
+-- Name: youtube_file youtube_file_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_file
+    ADD CONSTRAINT youtube_file_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: youtube_gender youtube_gender_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
 --
 
 ALTER TABLE ONLY public.youtube_gender
     ADD CONSTRAINT youtube_gender_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: youtube_miniature youtube_miniature_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_miniature
+    ADD CONSTRAINT youtube_miniature_pkey PRIMARY KEY (id);
 
 
 --
@@ -1462,6 +1608,13 @@ CREATE INDEX youtube_expression_user_id_dfbf1f85 ON public.youtube_expression US
 
 
 --
+-- Name: youtube_miniature_file_id_8d49c961; Type: INDEX; Schema: public; Owner: mikola-s
+--
+
+CREATE INDEX youtube_miniature_file_id_8d49c961 ON public.youtube_miniature USING btree (file_id);
+
+
+--
 -- Name: youtube_movie_channel_id_1e4f2e34; Type: INDEX; Schema: public; Owner: mikola-s
 --
 
@@ -1598,6 +1751,14 @@ ALTER TABLE ONLY public.youtube_expression
 
 ALTER TABLE ONLY public.youtube_expression
     ADD CONSTRAINT youtube_expression_user_id_dfbf1f85_fk_youtube_user_id FOREIGN KEY (user_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: youtube_miniature youtube_miniature_file_id_8d49c961_fk_youtube_file_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_miniature
+    ADD CONSTRAINT youtube_miniature_file_id_8d49c961_fk_youtube_file_id FOREIGN KEY (file_id) REFERENCES public.youtube_file(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
