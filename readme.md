@@ -63,17 +63,12 @@
 
 #### структура базы данных
 
-1
 
-![]("https://drive.google.com/open?id=1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV")
+![](https://github.com/mikola-s/lesson_35_dj_03_youtube/blob/master/links/youtube.png)
 
-2
 
-<img src="https://drive.google.com/open?id=1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV">
+[ccылка на файл](https://github.com/mikola-s/lesson_35_dj_03_youtube/blob/master/links/youtube.drawio)
 
-3
-
-![](https://drive.google.com/file/d/1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV/view)
 
 #### дамп базы данных
 
