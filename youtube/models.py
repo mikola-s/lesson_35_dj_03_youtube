@@ -63,14 +63,20 @@ class Movie(models.Model):
         return self.title
 
 
-class OpinionType(models.Model):
+class ExpressionType(models.Model):
     name = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.name
 
-class Like(models.Model):
+
+class Expression(models.Model):
     class Meta:
-        pass
         unique_together = ['movie', 'user']
 
+    type = models.ForeignKey(ExpressionType, on_delete=models.CASCADE, null=True, blank=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'Expression'
