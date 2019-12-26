@@ -413,6 +413,76 @@ ALTER SEQUENCE public.youtube_channel_id_seq OWNED BY public.youtube_channel.id;
 
 
 --
+-- Name: youtube_expression; Type: TABLE; Schema: public; Owner: mikola-s
+--
+
+CREATE TABLE public.youtube_expression (
+    id integer NOT NULL,
+    movie_id integer NOT NULL,
+    type_id integer,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.youtube_expression OWNER TO "mikola-s";
+
+--
+-- Name: youtube_expression_id_seq; Type: SEQUENCE; Schema: public; Owner: mikola-s
+--
+
+CREATE SEQUENCE public.youtube_expression_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.youtube_expression_id_seq OWNER TO "mikola-s";
+
+--
+-- Name: youtube_expression_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mikola-s
+--
+
+ALTER SEQUENCE public.youtube_expression_id_seq OWNED BY public.youtube_expression.id;
+
+
+--
+-- Name: youtube_expressiontype; Type: TABLE; Schema: public; Owner: mikola-s
+--
+
+CREATE TABLE public.youtube_expressiontype (
+    id integer NOT NULL,
+    name character varying(20) NOT NULL
+);
+
+
+ALTER TABLE public.youtube_expressiontype OWNER TO "mikola-s";
+
+--
+-- Name: youtube_expressiontype_id_seq; Type: SEQUENCE; Schema: public; Owner: mikola-s
+--
+
+CREATE SEQUENCE public.youtube_expressiontype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.youtube_expressiontype_id_seq OWNER TO "mikola-s";
+
+--
+-- Name: youtube_expressiontype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mikola-s
+--
+
+ALTER SEQUENCE public.youtube_expressiontype_id_seq OWNED BY public.youtube_expressiontype.id;
+
+
+--
 -- Name: youtube_gender; Type: TABLE; Schema: public; Owner: mikola-s
 --
 
@@ -444,41 +514,6 @@ ALTER TABLE public.youtube_gender_id_seq OWNER TO "mikola-s";
 --
 
 ALTER SEQUENCE public.youtube_gender_id_seq OWNED BY public.youtube_gender.id;
-
-
---
--- Name: youtube_like; Type: TABLE; Schema: public; Owner: mikola-s
---
-
-CREATE TABLE public.youtube_like (
-    id integer NOT NULL,
-    movie_id integer NOT NULL,
-    user_id integer NOT NULL
-);
-
-
-ALTER TABLE public.youtube_like OWNER TO "mikola-s";
-
---
--- Name: youtube_like_id_seq; Type: SEQUENCE; Schema: public; Owner: mikola-s
---
-
-CREATE SEQUENCE public.youtube_like_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.youtube_like_id_seq OWNER TO "mikola-s";
-
---
--- Name: youtube_like_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mikola-s
---
-
-ALTER SEQUENCE public.youtube_like_id_seq OWNED BY public.youtube_like.id;
 
 
 --
@@ -666,17 +701,24 @@ ALTER TABLE ONLY public.youtube_channel ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: youtube_expression id; Type: DEFAULT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_expression ALTER COLUMN id SET DEFAULT nextval('public.youtube_expression_id_seq'::regclass);
+
+
+--
+-- Name: youtube_expressiontype id; Type: DEFAULT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_expressiontype ALTER COLUMN id SET DEFAULT nextval('public.youtube_expressiontype_id_seq'::regclass);
+
+
+--
 -- Name: youtube_gender id; Type: DEFAULT; Schema: public; Owner: mikola-s
 --
 
 ALTER TABLE ONLY public.youtube_gender ALTER COLUMN id SET DEFAULT nextval('public.youtube_gender_id_seq'::regclass);
-
-
---
--- Name: youtube_like id; Type: DEFAULT; Schema: public; Owner: mikola-s
---
-
-ALTER TABLE ONLY public.youtube_like ALTER COLUMN id SET DEFAULT nextval('public.youtube_like_id_seq'::regclass);
 
 
 --
@@ -769,6 +811,14 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 46	Can change like	12	change_like
 47	Can delete like	12	delete_like
 48	Can view like	12	view_like
+49	Can add expression	13	add_expression
+50	Can change expression	13	change_expression
+51	Can delete expression	13	delete_expression
+52	Can view expression	13	view_expression
+53	Can add expression type	14	add_expressiontype
+54	Can change expression type	14	change_expressiontype
+55	Can delete expression type	14	delete_expressiontype
+56	Can view expression type	14	view_expressiontype
 \.
 
 
@@ -822,6 +872,10 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 18	2019-12-25 14:56:56.346044+00	2	movie1 in irina channel 1	1	[{"added": {}}]	9	1
 19	2019-12-25 14:58:06.559464+00	2	movie1 in irina channel 1	3		9	1
 20	2019-12-25 15:14:14.543847+00	3	111	1	[{"added": {}}]	9	1
+21	2019-12-25 15:38:40.760585+00	4	irina 222	1	[{"added": {}}]	9	1
+22	2019-12-25 15:38:51.565216+00	3	irina 111	2	[{"changed": {"fields": ["title"]}}]	9	1
+23	2019-12-25 15:39:04.818109+00	1	irina channel	2	[{"changed": {"fields": ["title"]}}]	7	1
+24	2019-12-25 15:39:14.00353+00	2	maxim channel	2	[{"changed": {"fields": ["title"]}}]	7	1
 \.
 
 
@@ -842,6 +896,8 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 10	youtube	status
 11	youtube	user
 12	youtube	like
+13	youtube	expression
+14	youtube	expressiontype
 \.
 
 
@@ -878,6 +934,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 26	youtube	0009_auto_20191225_1129	2019-12-25 13:29:54.267902+00
 27	youtube	0010_auto_20191225_1313	2019-12-25 15:13:20.309577+00
 28	youtube	0011_like	2019-12-25 15:36:43.640707+00
+29	youtube	0012_auto_20191226_0632	2019-12-26 08:33:04.233876+00
 \.
 
 
@@ -895,8 +952,24 @@ ba01wunji82rly9vjb52hyomvi7ygnb5	NTNkYTlkOGM1ODNhMGZmNDZhZjc4YjZkZjg2NTM1NmNlNjI
 --
 
 COPY public.youtube_channel (id, title, owner_id) FROM stdin;
-1	irina channell	1
-2	maxim channell	3
+1	irina channel	1
+2	maxim channel	3
+\.
+
+
+--
+-- Data for Name: youtube_expression; Type: TABLE DATA; Schema: public; Owner: mikola-s
+--
+
+COPY public.youtube_expression (id, movie_id, type_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: youtube_expressiontype; Type: TABLE DATA; Schema: public; Owner: mikola-s
+--
+
+COPY public.youtube_expressiontype (id, name) FROM stdin;
 \.
 
 
@@ -912,19 +985,12 @@ COPY public.youtube_gender (id, gender) FROM stdin;
 
 
 --
--- Data for Name: youtube_like; Type: TABLE DATA; Schema: public; Owner: mikola-s
---
-
-COPY public.youtube_like (id, movie_id, user_id) FROM stdin;
-\.
-
-
---
 -- Data for Name: youtube_movie; Type: TABLE DATA; Schema: public; Owner: mikola-s
 --
 
 COPY public.youtube_movie (id, file, post_time, title, channel_id, screen_shot) FROM stdin;
-3		2019-12-25 15:14:14.542486+00	111	1	
+4		2019-12-25 15:38:40.759382+00	irina 222	1	
+3		2019-12-25 15:14:14.542486+00	irina 111	1	
 \.
 
 
@@ -966,7 +1032,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 48, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 56, true);
 
 
 --
@@ -994,21 +1060,21 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 20, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 56, true);
 
 
 --
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 12, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 14, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 28, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 29, true);
 
 
 --
@@ -1019,6 +1085,20 @@ SELECT pg_catalog.setval('public.youtube_channel_id_seq', 2, true);
 
 
 --
+-- Name: youtube_expression_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
+--
+
+SELECT pg_catalog.setval('public.youtube_expression_id_seq', 1, false);
+
+
+--
+-- Name: youtube_expressiontype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
+--
+
+SELECT pg_catalog.setval('public.youtube_expressiontype_id_seq', 1, false);
+
+
+--
 -- Name: youtube_gender_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
@@ -1026,17 +1106,10 @@ SELECT pg_catalog.setval('public.youtube_gender_id_seq', 3, true);
 
 
 --
--- Name: youtube_like_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
---
-
-SELECT pg_catalog.setval('public.youtube_like_id_seq', 1, false);
-
-
---
 -- Name: youtube_movie_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_movie_id_seq', 3, true);
+SELECT pg_catalog.setval('public.youtube_movie_id_seq', 4, true);
 
 
 --
@@ -1198,27 +1271,35 @@ ALTER TABLE ONLY public.youtube_channel
 
 
 --
+-- Name: youtube_expression youtube_expression_movie_id_user_id_2f528459_uniq; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_expression
+    ADD CONSTRAINT youtube_expression_movie_id_user_id_2f528459_uniq UNIQUE (movie_id, user_id);
+
+
+--
+-- Name: youtube_expression youtube_expression_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_expression
+    ADD CONSTRAINT youtube_expression_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: youtube_expressiontype youtube_expressiontype_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_expressiontype
+    ADD CONSTRAINT youtube_expressiontype_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: youtube_gender youtube_gender_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
 --
 
 ALTER TABLE ONLY public.youtube_gender
     ADD CONSTRAINT youtube_gender_pkey PRIMARY KEY (id);
-
-
---
--- Name: youtube_like youtube_like_movie_id_user_id_184db781_uniq; Type: CONSTRAINT; Schema: public; Owner: mikola-s
---
-
-ALTER TABLE ONLY public.youtube_like
-    ADD CONSTRAINT youtube_like_movie_id_user_id_184db781_uniq UNIQUE (movie_id, user_id);
-
-
---
--- Name: youtube_like youtube_like_pkey; Type: CONSTRAINT; Schema: public; Owner: mikola-s
---
-
-ALTER TABLE ONLY public.youtube_like
-    ADD CONSTRAINT youtube_like_pkey PRIMARY KEY (id);
 
 
 --
@@ -1360,17 +1441,24 @@ CREATE INDEX youtube_channel_owner_id_3db44c53 ON public.youtube_channel USING b
 
 
 --
--- Name: youtube_like_movie_id_e69446ad; Type: INDEX; Schema: public; Owner: mikola-s
+-- Name: youtube_expression_movie_id_f4ee31b5; Type: INDEX; Schema: public; Owner: mikola-s
 --
 
-CREATE INDEX youtube_like_movie_id_e69446ad ON public.youtube_like USING btree (movie_id);
+CREATE INDEX youtube_expression_movie_id_f4ee31b5 ON public.youtube_expression USING btree (movie_id);
 
 
 --
--- Name: youtube_like_user_id_67234ecd; Type: INDEX; Schema: public; Owner: mikola-s
+-- Name: youtube_expression_type_id_d714b3f4; Type: INDEX; Schema: public; Owner: mikola-s
 --
 
-CREATE INDEX youtube_like_user_id_67234ecd ON public.youtube_like USING btree (user_id);
+CREATE INDEX youtube_expression_type_id_d714b3f4 ON public.youtube_expression USING btree (type_id);
+
+
+--
+-- Name: youtube_expression_user_id_dfbf1f85; Type: INDEX; Schema: public; Owner: mikola-s
+--
+
+CREATE INDEX youtube_expression_user_id_dfbf1f85 ON public.youtube_expression USING btree (user_id);
 
 
 --
@@ -1489,19 +1577,27 @@ ALTER TABLE ONLY public.youtube_channel
 
 
 --
--- Name: youtube_like youtube_like_movie_id_e69446ad_fk_youtube_movie_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+-- Name: youtube_expression youtube_expression_movie_id_f4ee31b5_fk_youtube_movie_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
 --
 
-ALTER TABLE ONLY public.youtube_like
-    ADD CONSTRAINT youtube_like_movie_id_e69446ad_fk_youtube_movie_id FOREIGN KEY (movie_id) REFERENCES public.youtube_movie(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.youtube_expression
+    ADD CONSTRAINT youtube_expression_movie_id_f4ee31b5_fk_youtube_movie_id FOREIGN KEY (movie_id) REFERENCES public.youtube_movie(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- Name: youtube_like youtube_like_user_id_67234ecd_fk_youtube_user_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+-- Name: youtube_expression youtube_expression_type_id_d714b3f4_fk_youtube_e; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
 --
 
-ALTER TABLE ONLY public.youtube_like
-    ADD CONSTRAINT youtube_like_user_id_67234ecd_fk_youtube_user_id FOREIGN KEY (user_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.youtube_expression
+    ADD CONSTRAINT youtube_expression_type_id_d714b3f4_fk_youtube_e FOREIGN KEY (type_id) REFERENCES public.youtube_expressiontype(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: youtube_expression youtube_expression_user_id_dfbf1f85_fk_youtube_user_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_expression
+    ADD CONSTRAINT youtube_expression_user_id_dfbf1f85_fk_youtube_user_id FOREIGN KEY (user_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
