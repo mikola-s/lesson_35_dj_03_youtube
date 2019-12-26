@@ -54,13 +54,17 @@ class Movie(models.Model):
         blank=True,
     )
     file = models.FileField(
-        upload_to=f'youtube/static/youtube/media/media/',
+        upload_to=f'youtube/static/youtube/media/',
         null=True,
         blank=True,
     )
 
     def __str__(self):
         return self.title
+
+
+class OpinionType(models.Model):
+    name = models.CharField(max_length=20)
 
 
 class Like(models.Model):
