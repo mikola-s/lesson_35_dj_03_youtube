@@ -63,8 +63,17 @@
 
 #### структура базы данных
 
-![](<img src="https://drive.google.com/open?id=1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV">)
+1
 
+![]("https://drive.google.com/open?id=1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV")
+
+2
+
+<img src="https://drive.google.com/open?id=1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV">
+
+3
+
+![](https://drive.google.com/file/d/1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV/view)
 
 #### дамп базы данных
 
