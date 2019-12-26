@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Gender(models.Model):
-    """ user gender """
+    """ user -> gender """
     gender = models.CharField(max_length=20)
 
     def __str__(self):
@@ -12,7 +12,7 @@ class Gender(models.Model):
 
 
 class Status(models.Model):
-    """ user status """
+    """ user -> status """
     status = models.CharField(max_length=20)
 
     def __str__(self):
@@ -39,7 +39,7 @@ class User(models.Model):
 
 
 class Channel(models.Model):
-    """ user channel """
+    """ user -> channel """
     title = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -48,7 +48,7 @@ class Channel(models.Model):
 
 
 class Movie(models.Model):
-    """ user channel movies"""
+    """ user -> channel -> movies"""
     title = models.CharField(max_length=255)
     post_time = models.DateTimeField(auto_now_add=True)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
@@ -67,8 +67,18 @@ class Movie(models.Model):
         return self.title
 
 
+class Miniature(models.Model):
+    """ movie -> file -> miniature"""
+    pass
+
+
+class File(models.Model):
+    """ movie -> file """
+    pass
+
+
 class ExpressionType(models.Model):
-    """ user expression type: like, dislike etc. """
+    """ expression -> expression type: like, dislike etc. """
     name = models.CharField(max_length=20)
 
     def __str__(self):
@@ -76,7 +86,8 @@ class ExpressionType(models.Model):
 
 
 class Expression(models.Model):
-    """ user expression about movies """
+    """ user -> expression <- movies """
+
     class Meta:
         unique_together = ['movie', 'user']
 
