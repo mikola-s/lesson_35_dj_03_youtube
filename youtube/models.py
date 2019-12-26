@@ -47,17 +47,6 @@ class Channel(models.Model):
         return self.title
 
 
-class File(models.Model):
-    """ movie -> file """
-    place = models.FileField(upload_to=f'youtube/static/youtube/media/')
-
-
-class Miniature(models.Model):
-    """ movie -> file -> miniature"""
-    place = models.FileField(upload_to=f'youtube/static/youtube/media/')
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
-
-
 class Movie(models.Model):
     """ user -> channel -> movies"""
     title = models.CharField(max_length=255)
@@ -68,10 +57,21 @@ class Movie(models.Model):
         null=True,
         blank=True,
     )
-    # file = models.OneToOneField(File, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
+
+class File(models.Model):
+    """ movie -> file """
+    place = models.FileField(upload_to=f'youtube/static/youtube/media/')
+    movie = models.OneToOneField(Movie, on_delete=models.CASCADE)
+
+
+class Miniature(models.Model):
+    """ movie -> file -> miniature"""
+    place = models.FileField(upload_to=f'youtube/static/youtube/media/')
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
 
 
 class ExpressionType(models.Model):
