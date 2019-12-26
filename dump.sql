@@ -488,7 +488,8 @@ ALTER SEQUENCE public.youtube_expressiontype_id_seq OWNED BY public.youtube_expr
 
 CREATE TABLE public.youtube_file (
     id integer NOT NULL,
-    place character varying(100) NOT NULL
+    place character varying(100) NOT NULL,
+    movie_id integer NOT NULL
 );
 
 
@@ -971,6 +972,8 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 59	2019-12-26 08:37:01.220617+00	1	Expression	1	[{"added": {}}]	13	1
 60	2019-12-26 11:26:32.739334+00	1	File object (1)	1	[{"added": {}}]	15	1
 61	2019-12-26 11:27:28.16574+00	1	Miniature object (1)	1	[{"added": {}}]	16	1
+62	2019-12-26 11:46:03.155629+00	2	File object (2)	1	[{"added": {}}]	15	1
+63	2019-12-26 11:47:00.096835+00	5	mov 1 in max chanell	1	[{"added": {}}]	9	1
 \.
 
 
@@ -1033,6 +1036,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 28	youtube	0011_like	2019-12-25 15:36:43.640707+00
 29	youtube	0012_auto_20191226_0632	2019-12-26 08:33:04.233876+00
 30	youtube	0013_auto_20191226_0922	2019-12-26 11:22:57.471611+00
+32	youtube	0014_file_movie	2019-12-26 11:45:03.696556+00
 \.
 
 
@@ -1079,8 +1083,9 @@ COPY public.youtube_expressiontype (id, name) FROM stdin;
 -- Data for Name: youtube_file; Type: TABLE DATA; Schema: public; Owner: mikola-s
 --
 
-COPY public.youtube_file (id, place) FROM stdin;
-1	youtube/static/youtube/media/mock_file_r1uk3j7.jpg
+COPY public.youtube_file (id, place, movie_id) FROM stdin;
+1	youtube/static/youtube/media/mock_file_r1uk3j7.jpg	3
+2	youtube/static/youtube/media/mock_file_1pdck9E.jpg	4
 \.
 
 
@@ -1111,6 +1116,7 @@ COPY public.youtube_miniature (id, place, file_id) FROM stdin;
 COPY public.youtube_movie (id, post_time, title, channel_id, screen_shot) FROM stdin;
 4	2019-12-25 15:38:40.759382+00	irina 222	1	
 3	2019-12-25 15:14:14.542486+00	irina 111	1	
+5	2019-12-26 11:47:00.094709+00	mov 1 in max chanell	2	youtube/static/youtube/media/mock_file_T4jsHhA.jpg
 \.
 
 
@@ -1180,7 +1186,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 61, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 63, true);
 
 
 --
@@ -1194,7 +1200,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 16, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 30, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 32, true);
 
 
 --
@@ -1222,7 +1228,7 @@ SELECT pg_catalog.setval('public.youtube_expressiontype_id_seq', 2, true);
 -- Name: youtube_file_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_file_id_seq', 1, true);
+SELECT pg_catalog.setval('public.youtube_file_id_seq', 2, true);
 
 
 --
@@ -1243,7 +1249,7 @@ SELECT pg_catalog.setval('public.youtube_miniature_id_seq', 1, true);
 -- Name: youtube_movie_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_movie_id_seq', 4, true);
+SELECT pg_catalog.setval('public.youtube_movie_id_seq', 5, true);
 
 
 --
@@ -1426,6 +1432,14 @@ ALTER TABLE ONLY public.youtube_expression
 
 ALTER TABLE ONLY public.youtube_expressiontype
     ADD CONSTRAINT youtube_expressiontype_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: youtube_file youtube_file_movie_id_key; Type: CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_file
+    ADD CONSTRAINT youtube_file_movie_id_key UNIQUE (movie_id);
 
 
 --
@@ -1755,6 +1769,14 @@ ALTER TABLE ONLY public.youtube_expression
 
 ALTER TABLE ONLY public.youtube_expression
     ADD CONSTRAINT youtube_expression_user_id_dfbf1f85_fk_youtube_user_id FOREIGN KEY (user_id) REFERENCES public.youtube_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: youtube_file youtube_file_movie_id_0cd32e63_fk_youtube_movie_id; Type: FK CONSTRAINT; Schema: public; Owner: mikola-s
+--
+
+ALTER TABLE ONLY public.youtube_file
+    ADD CONSTRAINT youtube_file_movie_id_0cd32e63_fk_youtube_movie_id FOREIGN KEY (movie_id) REFERENCES public.youtube_movie(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
