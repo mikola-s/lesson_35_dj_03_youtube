@@ -969,6 +969,8 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 57	2019-12-26 08:36:19.270989+00	1	like	1	[{"added": {}}]	14	1
 58	2019-12-26 08:36:25.278903+00	2	dislike	1	[{"added": {}}]	14	1
 59	2019-12-26 08:37:01.220617+00	1	Expression	1	[{"added": {}}]	13	1
+60	2019-12-26 11:26:32.739334+00	1	File object (1)	1	[{"added": {}}]	15	1
+61	2019-12-26 11:27:28.16574+00	1	Miniature object (1)	1	[{"added": {}}]	16	1
 \.
 
 
@@ -1078,6 +1080,7 @@ COPY public.youtube_expressiontype (id, name) FROM stdin;
 --
 
 COPY public.youtube_file (id, place) FROM stdin;
+1	youtube/static/youtube/media/mock_file_r1uk3j7.jpg
 \.
 
 
@@ -1097,6 +1100,7 @@ COPY public.youtube_gender (id, gender) FROM stdin;
 --
 
 COPY public.youtube_miniature (id, place, file_id) FROM stdin;
+1	youtube/static/youtube/media/mock_file_2ph9trT.jpg	1
 \.
 
 
@@ -1176,7 +1180,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 59, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 61, true);
 
 
 --
@@ -1218,7 +1222,7 @@ SELECT pg_catalog.setval('public.youtube_expressiontype_id_seq', 2, true);
 -- Name: youtube_file_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_file_id_seq', 1, false);
+SELECT pg_catalog.setval('public.youtube_file_id_seq', 1, true);
 
 
 --
@@ -1232,7 +1236,7 @@ SELECT pg_catalog.setval('public.youtube_gender_id_seq', 3, true);
 -- Name: youtube_miniature_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mikola-s
 --
 
-SELECT pg_catalog.setval('public.youtube_miniature_id_seq', 1, false);
+SELECT pg_catalog.setval('public.youtube_miniature_id_seq', 1, true);
 
 
 --
