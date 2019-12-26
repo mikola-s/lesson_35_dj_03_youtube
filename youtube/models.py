@@ -4,6 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Gender(models.Model):
+    """ user gender """
     gender = models.CharField(max_length=20)
 
     def __str__(self):
@@ -11,6 +12,7 @@ class Gender(models.Model):
 
 
 class Status(models.Model):
+    """ user status """
     status = models.CharField(max_length=20)
 
     def __str__(self):
@@ -37,6 +39,7 @@ class User(models.Model):
 
 
 class Channel(models.Model):
+    """ user channel """
     title = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -45,6 +48,7 @@ class Channel(models.Model):
 
 
 class Movie(models.Model):
+    """ user channel movies"""
     title = models.CharField(max_length=255)
     post_time = models.DateTimeField(auto_now_add=True)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
@@ -64,6 +68,7 @@ class Movie(models.Model):
 
 
 class ExpressionType(models.Model):
+    """ user expression type: like, dislike etc. """
     name = models.CharField(max_length=20)
 
     def __str__(self):
@@ -71,6 +76,7 @@ class ExpressionType(models.Model):
 
 
 class Expression(models.Model):
+    """ user expression about movies """
     class Meta:
         unique_together = ['movie', 'user']
 
