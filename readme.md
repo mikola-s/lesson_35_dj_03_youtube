@@ -63,7 +63,7 @@
 
 #### структура базы данных
 
-![](https://drive.google.com/file/d/1uANKAa4g_gxkgxKhuQnvAfaIPzyiuNnR/view?usp=sharing)
+![](<img src="https://drive.google.com/open?id=1G-cfQJFdn_79E5orFGg1KoJyvcfvRfKV">)
 
 
 #### дамп базы данных
