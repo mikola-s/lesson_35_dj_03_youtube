@@ -68,7 +68,7 @@ class Movie(models.Model):
         null=True,
         blank=True,
     )
-    file = models.OneToOneField(File, on_delete=models.CASCADE)
+    # file = models.OneToOneField(File, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
